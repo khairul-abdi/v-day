@@ -124,19 +124,27 @@ function swapGif(src) {
 }
 
 function enableRunaway() {
-    noBtn.addEventListener('mouseover', runAway)
+    noBtn.removeEventListener('mouseover', runAway)
+    noBtn.removeEventListener('touchstart', runAway)
+    
+    // Desktop: hover trigger
+    if (window.matchMedia('(hover: hover)').matches) {
+        noBtn.addEventListener('mouseover', runAway)
+    }
+    
+    // Mobile: touch trigger
     noBtn.addEventListener('touchstart', runAway, { passive: true })
 }
 
 function runAway() {
-    const margin = 20
+    const margin = 16
     const btnW = noBtn.offsetWidth
     const btnH = noBtn.offsetHeight
     const maxX = window.innerWidth - btnW - margin
-    const maxY = window.innerHeight - btnH - margin
+    const maxY = window.innerHeight - btnH - margin - 60 // Account for music toggle
 
     const randomX = Math.random() * maxX + margin / 2
-    const randomY = Math.random() * maxY + margin / 2
+    const randomY = Math.max(60, Math.random() * maxY + margin / 2)
 
     noBtn.style.position = 'fixed'
     noBtn.style.left = `${randomX}px`
